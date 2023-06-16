@@ -86,6 +86,7 @@ export default function Catalogo() {
   ])
   const [floresComponente, setFloresComponente] = useState([])
   const [pesquisarInput, setPesquisarInput] = useState("");
+  let contadorVisor
 
   const varrerFloresPorId = (id) => {
     const florEncontrada = flores.find((flor) => flor.id === id);
@@ -97,7 +98,7 @@ export default function Catalogo() {
       if (flor.nome !== pesquisarInput) {
         return { ...flor, pesquisa: false }
       }
-      return flor
+      return { ...flor, pesquisa: true }
     })
     setFlores([...floresParam])
   }
@@ -107,6 +108,7 @@ export default function Catalogo() {
       return { ...flor, pesquisa: true }
     })
     setFlores([...floresParam])
+    setPesquisarInput("")
   }
 
   const excluirFlor = (id) => {
@@ -117,6 +119,20 @@ export default function Catalogo() {
     flor.favorita = !flor.favorita
     const floresAtualizado = [...flores.filter(item => item.id !== flor.id), flor]
     setFlores([...floresAtualizado.filter(item => item.favorita !== false), ...floresAtualizado.filter(item => item.favorita !== true)])
+  }
+
+  const contadorVisorFunction = () => {
+    contadorVisor = 0
+    flores.forEach((item) => {
+      if(item.pesquisa === false) {
+        contadorVisor += 1
+      }
+    })
+    if(contadorVisor === flores.length) {
+      return (
+       <><hr style={{ margin: 20 }} />
+       <h1>Nenhum item encontrado!</h1></>)
+    }
   }
 
   const atualizarFloresComponente = () => {
@@ -145,6 +161,7 @@ export default function Catalogo() {
 
   useEffect(() => {
     atualizarFloresComponente()
+    contadorVisorFunction()
   }, [flores])
 
   // useEffect(() => {
@@ -170,10 +187,11 @@ export default function Catalogo() {
           />
         </label>
         <button style={{ margin: 15 }} onClick={() => { limparPesquisa() }}>
-              Limpar Pesquisa
-            </button>
+          Limpar Pesquisa
+        </button>
       </div>
       {floresComponente}
+      {contadorVisorFunction()}
       <hr style={{ margin: 20 }} />
     </div>
   );
