@@ -93,22 +93,21 @@ export default function Catalogo() {
   }
 
   const pesquisarFlores = () => {
-    if (pesquisarInput === null) {
-      const floresParam = flores.map((flor) => {
-        return { ...flor, pesquisa: true }
-      })
-      setFlores([...floresParam])
-    } else {
-      const floresParam = flores.map((flor) => {
-        if (flor.nome !== pesquisarInput) {
-          return { ...flor, pesquisa: false }
-        }
-        return flor
-      })
-      setFlores([...floresParam])
-    }
+    const floresParam = flores.map((flor) => {
+      if (flor.nome !== pesquisarInput) {
+        return { ...flor, pesquisa: false }
+      }
+      return flor
+    })
+    setFlores([...floresParam])
   }
 
+  const limparPesquisa = () => {
+    const floresParam = flores.map((flor) => {
+      return { ...flor, pesquisa: true }
+    })
+    setFlores([...floresParam])
+  }
 
   const excluirFlor = (id) => {
     setFlores(flores.filter(flor => flor.id !== id))
@@ -170,6 +169,9 @@ export default function Catalogo() {
             }}
           />
         </label>
+        <button style={{ margin: 15 }} onClick={() => { limparPesquisa() }}>
+              Limpar Pesquisa
+            </button>
       </div>
       {floresComponente}
       <hr style={{ margin: 20 }} />
